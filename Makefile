@@ -1,6 +1,4 @@
-SRC = libft/ft_putnbr.c\
-	libft/ft_putstr.c\
-	libft/ft_putchar.c\
+SRC = ft_calloc.c tobase.c ft_toupper.c 
 
 OBJ = ${SRC:.c=.o}
 

@@ -1,24 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   tobase.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchokri <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/03 17:13:44 by lchokri           #+#    #+#             */
-/*   Updated: 2021/12/04 04:39:15 by lchokri          ###   ########.fr       */
+/*   Created: 2021/12/04 03:57:10 by lchokri           #+#    #+#             */
+/*   Updated: 2021/12/04 04:55:16 by lchokri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFTPRINTF_H
-# define LIBFTPRINTF_H
+#include "libftprintf.h"
 
-# include <unistd.h>
-# include <stdlib.h>
+char	*tobase(unsigned long num, int base)
+{
+	char			*maholder;
+	char			*p;
+	unsigned long	y;
+	char			*mabase;
+	int				i;
 
-int	g_counter;
-void	*ft_calloc(size_t count, size_t size);
-char	*tobase(unsigned long num, int base);
-char	*ft_toupper(char *s, char *flag);
-
-#endif
+	i = 0;
+	mabase = "0123456789abcdef";
+	y = num;
+	while (y)
+	{
+		y /= base;
+		i++;
+	}
+	maholder = (char *)ft_calloc(i + 1, sizeof(char));
+	p = &maholder[y];
+	while (num)
+	{
+		p--;
+		*p = mabase[num % base];
+		num /= base;
+	}
+	return (p);
+}

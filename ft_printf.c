@@ -6,7 +6,7 @@
 /*   By: lchokri <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 14:45:56 by lchokri           #+#    #+#             */
-/*   Updated: 2021/12/04 03:01:15 by lchokri          ###   ########.fr       */
+/*   Updated: 2021/12/04 05:02:10 by lchokri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,8 @@
 
 void	ft_putchar(char c)
 {
-	write(1, &c, 1);
-}
-
-char *ft_toupper(char *s, char *flag)
-{
-	int i;
-
-	i = 0;
-	if (*flag == 'X')
-		while (s[i])
-		{
-			if (s[i] <= 122 && s[i] >= 97)
-				s[i] -= 32;
-			i++;
-		}
-	return (s);
+	if (write(1, &c, 1) == 1)
+		g_counter++;
 }
 
 void	ft_putstr(char *str)
@@ -45,54 +31,6 @@ void	ft_putstr(char *str)
 		ft_putchar(str[i]);
 		i++;
 	}
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	while (n > 0)
-	{
-		*(char *)s = '\0';
-		s++;
-		n--;
-	}
-}
-
-void   *ft_calloc(size_t count, size_t size)
-{
-        void    *p;
-
-        p = malloc(count * size);
-        if (!p)
-                return (NULL);
-        ft_bzero(p, size * count);
-        return (p);
-}
-
-char	*tobase(unsigned long num, int base)
-{
-	char		*maholder;
-	char		*p;
-	unsigned long y;
-	char		*mabase;
-	int			i;
-
-	i = 0;
-	mabase = "0123456789abcdef";
-	y = num;
-	while (y)
-	{
-		y /= base;
-		i++;
-	}
-	maholder = (char *)ft_calloc(i + 1, sizeof(char));
-	p = &maholder[y];
-	while (num)
-	{
-		p--;
-		*p = mabase[num % base];
-		num /= base;
-	}
-	return (p);
 }
 
 void	putptr(unsigned long n)
@@ -110,14 +48,16 @@ void	ft_writenbr(long n)
 	}
 	ft_putstr(tobase(n, 10));
 }
-int ft_printf(const char* str, ...)
-{
-	va_list args;
-	va_start(args, str);
-	const char *s;
 
+int	ft_printf(const char *str, ...)
+{
+	va_list		args;
+	const char	*s;
+
+	va_start (args, str);
+	g_counter = 0;
 	s = str;
-	while(*s != '\0')
+	while (*s != '\0')
 	{
 		if (*s == '%' && *(s + 1) == 'c')
 			ft_putchar(va_arg(args, int));
@@ -125,9 +65,9 @@ int ft_printf(const char* str, ...)
 			ft_putstr(va_arg(args, char *));
 		else if (*s == '%' && *(s + 1) == 'p')
 			putptr(va_arg(args, unsigned long));
-		else if(*s == '%' && (*(s + 1) == 'x' || *(s + 1) == 'X'))
+		else if (*s == '%' && (*(s + 1) == 'x' || *(s + 1) == 'X'))
 			ft_putstr(ft_toupper(tobase(
-			va_arg(args, unsigned long), 16), (char *)s + 1));
+						va_arg(args, unsigned long), 16), (char *)s + 1));
 		else if (*s == '%' && *(s + 1) == 'u')
 			ft_putstr(tobase(va_arg(args, unsigned long), 10));
 		else if (*s == '%' && (*(s + 1) == 'd' || *(s + 1) == 'i'))
@@ -140,10 +80,10 @@ int ft_printf(const char* str, ...)
 			s += 2;
 	}
 	va_end(args);
-	return (1);
+	return (g_counter);
 }
 
-int main()
+/*int main()
 {
 	char g = 'X';
 	char *p;
@@ -163,6 +103,6 @@ int main()
 	ft_printf("%u\n", -1);
 	ft_printf("%d >>>>>",2147483647);
 	printf("%d\n",2147483647);
-	ft_printf("%lu >>>>>", 5);
-	printf("%lu\n",5);
-}
+
+	ft_printf("%d",ft_printf("123456789 %c %s",g, bro));
+}*/
